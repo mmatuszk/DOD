@@ -7,6 +7,7 @@
 		<input type="text"  id="i_schedule" value="Paste schedule here"/>
 		<div id="o_schedule"></div>
 		<div id="error"></div>
+		<input type="button" id="send" value="Send Reminders" />
 		
 		
 		
@@ -16,8 +17,7 @@
 			var testSchedule = "Monday	AM:	Pierce		Welsh (full)\n15-May	PM:	Chan		Welsh (full), Matuszkiewicz (2D)\nTuesday	AM:	Novak		Welsh (full), Matuszkiewicz (2D), Nelson-Munson (1D)\n16-May	PM:	Van Arsdell		Welsh (full), Matuszkiewicz (2D), Nelson-Munson (1D), Thaker (1/2D)\nWednesday	AM:	Matuszkiewicz	marcin201@gmail.com	Welsh (full), Baltrushes (1D)\n17-May	PM:	Nash		Welsh (full), Baltrushes (1D)\nThursday	AM:	Baltrushes		Welsh (full), Chan (full), Salinas (1D)\n18-May	PM:	Lee		Welsh (full), Chan (full), Salinas (1D), Van Arsdell (2D), Thaker (1/2D)\nFriday	AM:	Nelson-Munson		Welsh (full), Chan (full), Van Arsdell (1D)\n19-May	PM:	Thaker		Welsh (full), Chan (full), Van Arsdell (1D)";
 			$('#i_schedule').focus();
 			DOD.bindPaste();
-			var d = new Date;
-			console.log(d.format('yyyymmddhhMMssl'));
+			DOD.bindSend();
 			// DOD.processSchedule(testSchedule);
 			// DOD.displayCoverage();
 		</script>
