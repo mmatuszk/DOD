@@ -31,6 +31,34 @@ var DOD = (function () {
 	pub.bindPaste = function() {
 			$("#i_schedule").bind("paste", pub.onPaste);
 	};
+
+	pub.onSend = function() {
+		console.log('onSend');
+		
+		for (var i = 0; i < days.length; i++) {
+			var day = days[i];
+			
+			event = pub.createCalEvent(coverageList[day], true);
+			var title = 'DOD '+coverageList[day].am.date.toDateString()+' AM';
+			if (coverageList[day].am.email) {
+				$.post('send.php', { 'to': coverageList[day].am.email, 'title': title, 'event': event}, function (data) {
+					console.log(data);
+					}, 'text');				
+			}
+
+			event = pub.createCalEvent(coverageList[day], false);
+			if (coverageList[day].pm.email) {
+				var title = 'DOD '+coverageList[day].pm.date.toDateString()+' PM';
+				$.post('send.php', { 'to': coverageList[day].pm.email, 'title': title, 'event': event}, function (data) {
+					console.log(data);
+					}, 'text');				
+			}
+		}					
+	};
+	
+	pub.bindSend = function () {
+		$('#send').bind('click', pub.onSend);
+	};
 	
 	pub.processSchedule = function (text) {
 		var rows = text.split('\n');
@@ -116,7 +144,9 @@ var DOD = (function () {
 		event += 'METHOD:REQUEST'+'\n';
 		event += 'BEGIN:VEVENT'+'\n';
 		
-		event += 'UID:'+now.format('yyyymmddhhMMssl')+' '+hostuid+'@'+host+'\n';
+		var uid = now.format('yyyymmddhhMMssl')+' '+Math.random()+' '+hostuid+'@'+host;
+		// console.log('UID:'+uid);
+		event += 'UID:'+uid+'\n';
 		event += 'DTSTAMP:'+now.format("yyyymmdd'T'hhMMss'Z'")+'\n';
 		event += 'ORGANIZER;CN=Marcin Matuszkiewicz:MAILTO:marcin201@gmail.com'+'\n';
 		if (am) {
@@ -125,8 +155,17 @@ var DOD = (function () {
 			event += 'DTEND:'+coverage.am.date.format("yyyymmdd")+'T';
 			event += '123000'+'\n';
 			event += 'DESCRIPTION:'+coverage.am.coverage+'\n';
+			event += 'SUMMARY:DOD '+coverage.am.date.toDateString()+' AM'+'\n';
 		}
-		event += 'SUMMARY:DOD'+'\n';
+		else {
+			event += 'DTSTART:'+coverage.pm.date.format("yyyymmdd")+'T';
+			event += '133000'+'\n';
+			event += 'DTEND:'+coverage.pm.date.format("yyyymmdd")+'T';
+			event += '173000'+'\n';
+			event += 'DESCRIPTION:'+coverage.pm.coverage+'\n';
+			event += 'SUMMARY:DOD '+coverage.pm.date.toDateString()+' PM'+'\n';			
+		}
+		
 		
 		event += 'BEGIN:VALARM'+'\n';
 		event += 'TRIGGER:-PT15M'+'\n';
@@ -138,6 +177,8 @@ var DOD = (function () {
 		event += 'END:VEVENT'+'\n';
 		event += 'END:VCALENDAR'+'\n';
 		
+		// console.log(event);
+		// console.log('\n');
 		return event;
 	};
 	
