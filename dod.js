@@ -40,19 +40,15 @@ var DOD = (function () {
 			
 			event = pub.createCalEvent(coverageList[day], true);
 			var title = 'DOD '+coverageList[day].am.date.toDateString()+' AM';
-			if (coverageList[day].am.email) {
-				$.post('send.php', { 'to': coverageList[day].am.email, 'title': title, 'event': event}, function (data) {
-					console.log(data);
-					}, 'text');				
-			}
+			$.post('send.php', { 'to': coverageList[day].am.name, 'title': title, 'event': event}, function (data) {
+				console.log(data);
+				}, 'text');				
 
 			event = pub.createCalEvent(coverageList[day], false);
-			if (coverageList[day].pm.email) {
-				var title = 'DOD '+coverageList[day].pm.date.toDateString()+' PM';
-				$.post('send.php', { 'to': coverageList[day].pm.email, 'title': title, 'event': event}, function (data) {
-					console.log(data);
-					}, 'text');				
-			}
+			var title = 'DOD '+coverageList[day].pm.date.toDateString()+' PM';
+			$.post('send.php', { 'to': coverageList[day].pm.name, 'title': title, 'event': event}, function (data) {
+				console.log(data);
+				}, 'text');				
 		}					
 	};
 	
@@ -117,13 +113,13 @@ var DOD = (function () {
 		
 		coverage['am']['date'] = new Date(dateStr+year);
 		coverage['am']['name'] = am_cells[2].trim();
-		coverage['am']['email'] = am_cells[3].trim();
-		coverage['am']['coverage'] = am_cells[4].trim();
+		// coverage['am']['email'] = am_cells[3].trim();
+		coverage['am']['coverage'] = am_cells[3].trim();
 
 		coverage['pm']['date'] = new Date(dateStr+year);
 		coverage['pm']['name'] = pm_cells[2].trim();
-		coverage['pm']['email'] = pm_cells[3].trim();
-		coverage['pm']['coverage'] = pm_cells[4].trim();
+		// coverage['pm']['email'] = pm_cells[3].trim();
+		coverage['pm']['coverage'] = pm_cells[3].trim();
 		
 		console.log(dateStr);
 		
@@ -190,7 +186,8 @@ var DOD = (function () {
 		var $tab = $('<table></table>');
 		$div.append($tab);
 		var $h = $('<tr></tr>');
-		$h.append('<td>Day</td><td>Date</td><td>Shift</td><td>DOD</td><td>DOD email</td><td>Coverage</td>');
+		// $h.append('<td>Day</td><td>Date</td><td>Shift</td><td>DOD</td><td>DOD email</td><td>Coverage</td>');
+		 $h.append('<td>Day</td><td>Date</td><td>Shift</td><td>DOD</td><td>Coverage</td>');
 		$tab.append($h);
 		
 		for (var i = 0; i < days.length; i++) {
@@ -200,7 +197,7 @@ var DOD = (function () {
 			$r.append('<td>'+coverageList[day].am.date.toLocaleDateString("en-US")+'</td>');
 			$r.append('<td>AM</td>');
 			$r.append('<td>'+coverageList[day].am.name+'</td>');
-			$r.append('<td>'+coverageList[day].am.email+'</td>');
+			// $r.append('<td>'+coverageList[day].am.email+'</td>');
 			$r.append('<td>'+coverageList[day].am.coverage+'</td>');
 			$tab.append($r);
 	
@@ -209,7 +206,7 @@ var DOD = (function () {
 			$r.append('<td>'+coverageList[day].pm.date.toLocaleDateString("en-US")+'</td>');
 			$r.append('<td>PM</td>');
 			$r.append('<td>'+coverageList[day].pm.name+'</td>');
-			$r.append('<td>'+coverageList[day].pm.email+'</td>');
+			// $r.append('<td>'+coverageList[day].pm.email+'</td>');
 			$r.append('<td>'+coverageList[day].pm.coverage+'</td>');
 			$tab.append($r);
 					
