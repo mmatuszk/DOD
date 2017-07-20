@@ -14,6 +14,8 @@ var DOD = (function () {
 	
 	var organizer = 'marcin201@gmail.com';
 	
+	var id = 0;
+	
 	var pub = {};
 	
 	pub.onPaste = function (e) {
@@ -40,15 +42,25 @@ var DOD = (function () {
 			
 			event = pub.createCalEvent(coverageList[day], true);
 			var title = 'DOD '+coverageList[day].am.date.toDateString()+' AM';
-			$.post('send.php', { 'to': coverageList[day].am.name, 'title': title, 'event': event}, function (data) {
-				console.log(data);
-				}, 'text');				
+			$.post('send.php', { 'to': coverageList[day].am.name, 'title': title, 'event': event, 'id': coverageList[day].am.id}, function (data) {
+					console.log(data);
+					if (data.status == 'success') {
+						$('#'+data.id).addClass('send-ok');
+					} else if (data.status == 'failed') {
+						$('#'+data.id).addClass('send-err');
+					}
+				}, 'json');				
 
 			event = pub.createCalEvent(coverageList[day], false);
 			var title = 'DOD '+coverageList[day].pm.date.toDateString()+' PM';
-			$.post('send.php', { 'to': coverageList[day].pm.name, 'title': title, 'event': event}, function (data) {
-				console.log(data);
-				}, 'text');				
+			$.post('send.php', { 'to': coverageList[day].pm.name, 'title': title, 'event': event, 'id': coverageList[day].pm.id}, function (data) {
+					console.log(data);
+					if (data.status == 'success') {
+						$('#'+data.id).addClass('send-ok');
+					} else if (data.status == 'failed') {
+						$('#'+data.id).addClass('send-err');
+					}					
+				}, 'json');				
 		}					
 	};
 	
@@ -92,12 +104,14 @@ var DOD = (function () {
 	pub.processDay = function (am_row, pm_row) {
 		var coverage = {
 			'am': {
+				'id' : undefined,
 				'date': undefined,
 				'name': undefined,
 				'email': undefined,
 				'coverage': undefined
 			},
 			'pm': {
+				'id' : undefined,
 				'date': undefined,
 				'name': undefined,
 				'email': undefined,
@@ -111,11 +125,13 @@ var DOD = (function () {
 		var dateStr = pm_cells[0].trim();
 		var year = new Date().getFullYear();
 		
+		coverage['am']['id'] = id++;
 		coverage['am']['date'] = new Date(dateStr+year);
 		coverage['am']['name'] = am_cells[2].trim();
 		// coverage['am']['email'] = am_cells[3].trim();
 		coverage['am']['coverage'] = am_cells[3].trim();
 
+		coverage['pm']['id'] = id++;
 		coverage['pm']['date'] = new Date(dateStr+year);
 		coverage['pm']['name'] = pm_cells[2].trim();
 		// coverage['pm']['email'] = pm_cells[3].trim();
@@ -192,7 +208,7 @@ var DOD = (function () {
 		
 		for (var i = 0; i < days.length; i++) {
 			var day = days[i];
-			var $r = $('<tr></tr>');
+			var $r = $('<tr id="'+coverageList[day].am.id+'"></tr>');
 			$r.append('<td>'+day+'</td>');
 			$r.append('<td>'+coverageList[day].am.date.toLocaleDateString("en-US")+'</td>');
 			$r.append('<td>AM</td>');
@@ -201,7 +217,7 @@ var DOD = (function () {
 			$r.append('<td>'+coverageList[day].am.coverage+'</td>');
 			$tab.append($r);
 	
-			var $r = $('<tr></tr>');
+			var $r = $('<tr id="'+coverageList[day].pm.id+'"></tr>');
 			$r.append('<td>'+day+'</td>');
 			$r.append('<td>'+coverageList[day].pm.date.toLocaleDateString("en-US")+'</td>');
 			$r.append('<td>PM</td>');
