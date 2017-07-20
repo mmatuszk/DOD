@@ -6,7 +6,7 @@ $toMap = array(
 	"baltrushes" => "Robin.J.Baltrushes@kp.org",
 	"chan" => "Melissa.M.Lewis@kp.org",
 	"lee" => "Gregory.W.Lee@kp.org",
-	"matuszkiewicz" => "marcin201@gmail.com",
+	"matuszkiewicz" => "marcin.matuszkiewicz@kp.org",
 	"nash" => "Steven.p.nash@kp.org",
 	"nelson-munson" => "Kaaren.A.Nelson-Munson@kp.org",
 	"pierce" => "Lindsey.X.Pierce@kp.org",
@@ -17,7 +17,9 @@ $toMap = array(
 	"van arsdell" => "Kaitlyn.M.Van-Arsdell@kp.org"
 );
 
-if (isset($_POST['to']) && isset($_POST['title']) && isset($_POST['event'])) {
+$exitCode = array ();
+
+if (isset($_POST['to']) && isset($_POST['title']) && isset($_POST['id']) && isset($_POST['event'])) {
 	$to = strtolower($_POST['to']);
 	
 	if (array_key_exists($to, $toMap)) {
@@ -53,14 +55,21 @@ if (isset($_POST['to']) && isset($_POST['title']) && isset($_POST['event'])) {
 		$message .= $_POST['event'];
 		
 		// echo $_POST['event'];
-		// $mailsent = mail($_POST['to'], $_POST['title'], $message, $headers);
-		echo $_POST['to'].'|'.$_POST['title'];
+		$mailsent = mail($email, $_POST['title'], $message, $headers);
+		$exitCode['status'] = 'success';
+		$exitCode['message'] = $_POST['to'].'|'.$_POST['title'];
+		$exitCode['id'] = $_POST['id'];
 	} else {
-		echo "Recipient not found: ".$to;
+		$exitCode['status'] = 'failed';
+		$exitCode['message'] = "Recipient not found: ".$to;
+		$exitCode['id'] = $_POST['id'];
 	}
 	
 } else {
-	echo "no data sent";
+	$exitCode['status'] = "failed";
+	$exitCode['message'] = "no data recieved";
 }
+
+echo json_encode($exitCode);
 
 ?>
