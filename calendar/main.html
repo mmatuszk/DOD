@@ -1,0 +1,108 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script src="date.format.js"></script>
+  <script src="dodcal.js"></script>
+</head>
+<body>
+  <div data-role="page" id="page-view-week">
+    <div data-role="header">
+      <h1>View Week</h1>
+      <div data-role="navbar" class="main-navbar"> </div>
+    </div>
+    <div data-role="main">
+      <input type="button" id="view-next-week" value="Next" />
+      <table data-role="table" id="tb-view-week" data-mode="reflow" class="ui-responsive">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Shift</th>
+            <th>BMOB FM</th>
+            <th>Coverage</th>
+            <th>Piedmont FM</th>            
+            <th>Coverage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mon Aug 8</td>
+            <td>AM</td>
+            <td>Matuszkiewicz</td>
+            <td>Nash (full)</td>
+            <td>Chan</td>
+            <td>Nash (full)</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div data-role="page" id="page-edit-week">
+    <div data-role="header">
+      <h1>Edit Week (NUID:<span class="disp-nuid"></span>)</h1>
+      <div data-role="navbar" class="main-navbar"> </div>
+    </div>
+    <div data-role="main">
+      <input type="button" id="save-edit-week" value="Save" />
+      <table data-role="table" id="tb-edit-week" data-mode="reflow" class="ui-responsive">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Shift</th>
+            <th></th>
+            <th>BMOB FM</th>
+            <th>Coverage</th>
+            <th></th>
+            <th>Piedmont FM</th>            
+            <th>Coverage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mon Aug 8</td>
+            <td>
+              <select data-role="select">
+                <option value="1">AM</option>
+                <option value="2">PM</option>
+              </select>              
+            </td>
+            <td><input type="checkbox" /></td>
+            <td>DOD1</td>
+            <td><input type="text" /></td>
+            <td><input type="checkbox" /></td>
+            <td>DOD2</td>
+            <td><input type="text" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+  <div data-role="page" id="page-nuid">
+    <div data-role="header">
+      <h1>KP SM Enter NUID</h1>
+    </div>
+    <div data-role="main">
+      <input type="text" id="nuid" placeholder="Enter NUID"/>
+      <input type="button" id="enter-nuid" value="Enter"/>
+    </div>
+  </div>
+</body>
+<script>
+
+  // $('#page-report').on('pagebeforeshow', function(event) {
+    // smcat.initReport();
+  // });
+  // smcat.bindEnterNUID();
+  // smcat.bindSaveNext();
+  // smcat.initCategories();
+  dodcal.bindSaveEditWeek();
+  $("#page-edit-week ").on('pagebeforeshow', function (event) {
+    dodcal.initEditWeek();
+  });
+</script>
+</html>

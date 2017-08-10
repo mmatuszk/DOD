@@ -1,0 +1,21 @@
+<html>
+<head>
+  <script src="http://localhost/lib/jquery-1.11.1.js"></script>
+</head>
+<body>
+  
+</body>
+<script type="text/javascript">
+  var cmd = {};
+  cmd['cmd'] = 'saveCoverage';
+  cmd['date'] = '2017-08-07';
+  cmd['shift_id'] = 1;
+  cmd['location_id'] = 1;
+  cmd['dod_id'] = 8;;
+  cmd['dod_next'] = true;
+  cmd['coverage'] = 'Marcin (full), Steve (1D)';
+  $.post('dodcal.php', cmd, function(response) {
+    $('body').html(response);
+  });
+</script>
+</html>
