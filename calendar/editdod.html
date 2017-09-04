@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script src="date.format.js"></script>
+  <script src="dodcal.js"></script>
+</head>
+<body>
+  <div data-role="page" id="page-edit-week">
+    <div data-role="header">
+      <h1>Edit Week (NUID:<span class="disp-nuid"></span>)</h1>
+      <div data-role="navbar" class="main-navbar"> </div>
+    </div>
+    <div data-role="main">
+      <a href="#" class="ui-btn ui-btn-inline" id="edit-prev-week">Previous</a>
+      <a href="#" class="ui-btn ui-btn-inline" id="edit-copy-prev-week">Copy Previous</a>
+      <a href="#" class="ui-btn ui-btn-inline" id="edit-save-week">Save</a>
+      <a href="#" class="ui-btn ui-btn-inline" id="edit-next-week">Next</a>
+      <table data-role="table" id="tb-edit-week" data-mode="reflow" class="ui-responsive">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Unit</th>
+            <th></th>
+            <th>BMOB FM</th>
+            <th>Coverage</th>
+            <th></th>
+            <th>Piedmont FM</th>            
+            <th>Coverage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- <tr>
+            <td>Mon Aug 8</td>
+            <td>
+              <select data-role="select">
+                <option value="1">AM</option>
+                <option value="2">PM</option>
+              </select>              
+            </td>
+            <td><input type="checkbox" /></td>
+            <td>DOD1</td>
+            <td><input type="text" /></td>
+            <td><input type="checkbox" /></td>
+            <td>DOD2</td>
+            <td><input type="text" /></td>
+          </tr> -->
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+  <div data-role="page" id="page-nuid">
+    <div data-role="header">
+      <h1>KP SM Enter NUID</h1>
+    </div>
+    <div data-role="main">
+      <input type="text" id="nuid" placeholder="Enter NUID"/>
+      <input type="button" id="enter-nuid" value="Enter"/>
+    </div>
+  </div>
+</body>
+<script type="text/javascript">
+  dodcal.bindEditNextWeek();
+  dodcal.bindEditPrevWeek();
+  dodcal.bindEditCopyPrevWeek();
+  dodcal.bindSaveEditWeek();
+  $("#page-edit-week").on('pagebeforeshow', function (event) {
+    dodcal.initEditWeek();
+  });
+</script>
+</html>
