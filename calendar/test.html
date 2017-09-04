@@ -7,13 +7,13 @@
 </body>
 <script type="text/javascript">
   var cmd = {};
-  cmd['cmd'] = 'saveCoverage';
-  cmd['date'] = '2017-08-07';
+  cmd['cmd'] = 'getCoverage';
+  cmd['date'] = '2017-08-04';
   cmd['shift_id'] = 1;
   cmd['location_id'] = 1;
-  cmd['dod_id'] = 8;;
-  cmd['dod_next'] = true;
-  cmd['coverage'] = 'Marcin (full), Steve (1D)';
+  // cmd['dod_id'] = 8;;
+  // cmd['dod_next'] = true;
+  // cmd['coverage'] = 'Marcin (full), Steve (1D)';
   $.post('dodcal.php', cmd, function(response) {
     $('body').html(response);
   });
