@@ -25,8 +25,8 @@ dodcal = (function () {
     }
   };
   
-  getCurrentWeek = function (today) {
-    var mon = new Date();
+  getWeek = function (today) {
+    var mon = new Date(today);
     var week = [];
 
     if (today.getDay() == 0) { // go to next week
@@ -37,18 +37,16 @@ dodcal = (function () {
       mon.setDate(today.getDate() - today.getDay() + 1);
     }
     
-    console.log(mon);
     for (var i = 0; i < 5; i++) {
-      var tmp = new Date();
+      var tmp = new Date(mon);
       tmp.setDate(mon.getDate() + i);
       week.push(tmp);
     }
-    console.log(week);
     return week;
   };
   
   /*
-   * Function: uiGetDate
+   * Function: uiEditWeekGetDate
    * 
    * Parameters
    *  day - day of week
@@ -61,70 +59,93 @@ dodcal = (function () {
    *    aa - AM
    *    pm - PM
    */
-  uiGetDate = function (day, shift) {
+  uiEditWeekGetDate = function (day, shift) {
     var id = 'date-'+day+'-'+shift;
-    var tmp = $('#'+id).text();
+    var $e = $('#tb-edit-week').find('#'+id);
+    var tmp = $e.text();
     return new Date(tmp);
   };
   
   /*
-   * Function: uiGetNextDOD
+   * Function: uiEditWeekGetNextDOD
    * 
    * Parameters
    *    1 - BOMB
    *    2 - Piedmont
    */
-  uiGetNextDOD = function (day, shift, location) {
+  uiEditWeekGetNextDOD = function (day, shift, location) {
     var id = 'next-dod-'+day+'-'+shift+'-'+location;
-    return $('#'+id).prop('checked') ? 1 : 0;
+    var $e = $('#tb-edit-week').find('#'+id);
+    return $e.prop('checked') ? 1 : 0;
   };
+  uiEditWeekSetNextDOD = function (day, shift, location, dod_next) {
+    var id = 'next-dod-'+day+'-'+shift+'-'+location;
+    var $e = $('#tb-edit-week').find('#'+id);
+    if (dod_next == '0') {
+      $e.prop('checked', false);
+    } else {
+      $e.prop('checked', true);
+    }
+  };  
+  pub.uiEditWeekSetNextDOD = uiEditWeekSetNextDOD;
   
-  pub.uiGetNextDOD = uiGetNextDOD;
-  
-  uiGetDOD = function(day, shift, location) {
+  uiEditWeekGetDOD = function(day, shift, location) {
     var id = 'dod-'+day+'-'+shift+'-'+location;
-    return $('#'+id).val();
+    var $e = $('#tb-edit-week').find('#'+id);
+    return $e.val();
   };
   
-  uiGetCoverage = function(day, shift, location) {
+  uiEditWeekSetDOD = function(day, shift, location, dod) {
+    var id = 'dod-'+day+'-'+shift+'-'+location;
+    var $e = $('#tb-edit-week').find('#'+id);
+    $e.val(dod);
+    $e.selectmenu('refresh', true);    
+  };
+  pub.uiEditWeekSetDOD = uiEditWeekSetDOD;
+  
+  uiEditWeekGetCoverage = function(day, shift, location) {
     var id = 'coverage-'+day+'-'+shift+'-'+location;
-    return $('#'+id).val();    
+    var $e = $('#tb-edit-week').find('#'+id);
+    return $e.val();    
   };
   
+  uiEditWeekSetCoverage = function(day, shift, location, coverage) {
+    var id = 'coverage-'+day+'-'+shift+'-'+location;
+    var $e = $('#tb-edit-week').find('#'+id);
+    $e.val(coverage);    
+  };
+  pub.uiEditWeekSetCoverage = uiEditWeekSetCoverage;
+
   uiGetWeek = function () {
     coverage = [];
     for (var i = 0; i < 5; i++) {
       var tmp = {'am': {'1': {}, '2': {}}, 'pm': {'1': {}, '2': {}}};
-      tmp['am']['1']['date'] = uiGetDate(i, 'am');
-      tmp['am']['1']['dod_next'] = uiGetNextDOD(i, 'am', 1);
-      tmp['am']['1']['dod_id'] = uiGetDOD(i, 'am', 1);
-      tmp['am']['1']['coverage'] = uiGetCoverage(i, 'am', 1);
+      tmp['am']['1']['date'] = uiEditWeekGetDate(i, 'am');
+      tmp['am']['1']['dod_next'] = uiEditWeekGetNextDOD(i, 'am', 1);
+      tmp['am']['1']['dod_id'] = uiEditWeekGetDOD(i, 'am', 1);
+      tmp['am']['1']['coverage'] = uiEditWeekGetCoverage(i, 'am', 1);
       
-      tmp['am']['2']['date'] = uiGetDate(i, 'am');
-      tmp['am']['2']['dod_next'] = uiGetNextDOD(i, 'am', 2);
-      tmp['am']['2']['dod_id'] = uiGetDOD(i, 'am', 2);
-      tmp['am']['2']['coverage'] = uiGetCoverage(i, 'am', 2);
+      tmp['am']['2']['date'] = uiEditWeekGetDate(i, 'am');
+      tmp['am']['2']['dod_next'] = uiEditWeekGetNextDOD(i, 'am', 2);
+      tmp['am']['2']['dod_id'] = uiEditWeekGetDOD(i, 'am', 2);
+      tmp['am']['2']['coverage'] = uiEditWeekGetCoverage(i, 'am', 2);
 
-      tmp['pm']['1']['date'] = uiGetDate(i, 'pm');
-      tmp['pm']['1']['dod_next'] = uiGetNextDOD(i, 'pm', 1);
-      tmp['pm']['1']['dod_id'] = uiGetDOD(i, 'pm', 1);
-      tmp['pm']['1']['coverage'] = uiGetCoverage(i, 'pm', 1);
+      tmp['pm']['1']['date'] = uiEditWeekGetDate(i, 'pm');
+      tmp['pm']['1']['dod_next'] = uiEditWeekGetNextDOD(i, 'pm', 1);
+      tmp['pm']['1']['dod_id'] = uiEditWeekGetDOD(i, 'pm', 1);
+      tmp['pm']['1']['coverage'] = uiEditWeekGetCoverage(i, 'pm', 1);
       
-      tmp['pm']['2']['date'] = uiGetDate(i, 'pm');
-      tmp['pm']['2']['dod_next'] = uiGetNextDOD(i, 'pm', 2);
-      tmp['pm']['2']['dod_id'] = uiGetDOD(i, 'pm', 2);
-      tmp['pm']['2']['coverage'] = uiGetCoverage(i, 'pm', 2);
+      tmp['pm']['2']['date'] = uiEditWeekGetDate(i, 'pm');
+      tmp['pm']['2']['dod_next'] = uiEditWeekGetNextDOD(i, 'pm', 2);
+      tmp['pm']['2']['dod_id'] = uiEditWeekGetDOD(i, 'pm', 2);
+      tmp['pm']['2']['coverage'] = uiEditWeekGetCoverage(i, 'pm', 2);
 
       coverage.push(tmp);
     }
     return coverage;
   };
   
-  uiEditWeek = function(day) {
-    var week = [];
-
-    week = getCurrentWeek(day);
-    
+  uiEditWeek = function(week) {
     $('#tb-edit-week > tbody').empty();
     for (var i = 0; i < week.length; i++) {
       var $tr = $('<tr></tr>');
@@ -238,12 +259,278 @@ dodcal = (function () {
     }
     
     $('#tb-edit-week').table('refresh');
-    $("tbody tr:even").css("background-color", "#F0F0F0");
+    $("#tb-edit-week > tbody tr:even").css("background-color", "#F0F0F0");
+  };
+  
+  shift_name = function(shift) {
+    if (shift == 1) {
+      return 'am';
+    }
+    return 'pm';
+  };
+
+  /*
+   * Function: uiViewWeekGetDate
+   * 
+   * Parameters
+   *  day - day of week
+   *    0 - Monday
+   *    1 - Tuesda
+   *    ...
+   *    4 - Friday
+   * 
+   *  shift
+   *    aa - AM
+   *    pm - PM
+   */
+  uiViewWeekGetDate = function (day, shift) {
+    var id = 'date-'+day+'-'+shift;
+    var $e = $('#tb-view-week').find('#'+id);
+    var tmp = $e.text();
+    return new Date(tmp);
+  };
+  pub.uiViewWeekGetDate = uiViewWeekGetDate;
+  
+  uiViewWeekSetDOD = function(day, shift, location, dod) {
+    var id = 'dod-'+day+'-'+shift+'-'+location;
+    var $e = $('#tb-view-week').find('#'+id);
+    return $e.text(dod);
+  };
+  pub.uiViewWeekSetDOD = uiViewWeekSetDOD;
+  
+  uiViewWeekSetCoverage = function(day, shift, location, coverage) {
+    var id = 'coverage-'+day+'-'+shift+'-'+location;
+    var $e = $('#tb-view-week').find('#'+id);
+    $e.text(coverage);    
+  };
+  pub.uiViewWeekSetCoverage = uiViewWeekSetCoverage;
+  
+  /*
+   * Function: uiViewWeekGetDate
+   * 
+   * Parameters
+   *  day - day of week
+   *    0 - Monday
+   *    1 - Tuesda
+   *    ...
+   *    4 - Friday
+   * 
+   *  shift
+   *    aa - AM
+   *    pm - PM
+   */
+  uiViewDayGetDate = function (shift) {
+    var id = 'date-'+shift;
+    var $e = $('#tb-view-day').find('#'+id);
+    var tmp = $e.text();
+    return new Date(tmp);
+  };
+  pub.uiViewDayGetDate = uiViewDayGetDate;
+  
+  uiViewDaySetDOD = function(shift, location, dod) {
+    var id = 'dod-'+shift+'-'+location;
+    var $e = $('#tb-view-day').find('#'+id);
+    return $e.text(dod);
+  };
+  pub.uiViewDaySetDOD = uiViewDaySetDOD;
+  
+  uiViewDaySetCoverage = function(shift, location, coverage) {
+    var id = 'coverage-'+shift+'-'+location;
+    var $e = $('#tb-view-day').find('#'+id);
+    $e.text(coverage);    
+  };
+  pub.uiViewDaySetCoverage = uiViewDaySetCoverage;
+  
+  uiGetDay = function () {
+    var tmp = $('#dod-day').text();
+    return new Date(tmp);    
+  };
+  
+  uiSetDay = function (day) {
+    $('#dod-day').text(day.toDateString());
+  };
+  
+  
+  uiViewWeek = function (week) {
+    $('#tb-view-week > tbody').empty();
+    for (var i = 0; i < week.length; i++) {
+      var $tr = $('<tr></tr>');
+      // AM, location 1
+      var $td = $('<td></td>');
+      var $span = $('<span id="date-'+i+'-am">'+week[i].toDateString()+'</span>');
+      $td.append($span);
+      $tr.append($td);
+      
+      $td = $('<td>'+shifts[0].shift_name+'</td>');
+      $tr.append($td);
+      
+      $td = $('<td></td');
+      $span = $('<span id="dod-'+i+'-am-1"></span');
+      $td.append($span);
+      $tr.append($td);
+      
+      // AM, location 2
+      $td = $('<td></td>');
+      $span = $('<span id="coverage-'+i+'-am-1"></span>');
+      $td.append($span);
+      $tr.append($td);
+      
+      $td = $('<td></td');
+      $span = $('<span id="dod-'+i+'-am-2"></span>');
+      $td.append($span);
+      $tr.append($td);
+      
+      $td = $('<td></td>');
+      $span = $('<span id="coverage-'+i+'-am-2"></span>');
+      $td.append($span);
+      $tr.append($td);
+            
+      $('#tb-view-week > tbody').append($tr);
+      
+      // PM, location 1
+      var $tr = $('<tr></tr>');
+      var $td = $('<td></td>');
+      var $span = $('<span id="date-'+i+'-pm">'+week[i].toDateString()+'</span>');
+      $td.append($span);
+      $tr.append($td);
+      
+      $td = $('<td>'+shifts[1].shift_name+'</td>');
+      $tr.append($td);      
+      
+      $td = $('<td></td>');
+      $span = $('<span id="dod-'+i+'-pm-1"></span');
+      $td.append($span);
+      $tr.append($td);
+      
+      $td = $('<td></td>');
+      $span = $('<span  id="coverage-'+i+'-pm-1"></span>');
+      $td.append($span);
+      $tr.append($td);
+      
+      // PM, location 2
+      $td = $('<td></td>');
+      $span = $('<span id="dod-'+i+'-pm-2"></span');
+      $td.append($span);
+      $tr.append($td);
+
+      $td = $('<td></td>');
+      $span = $('<span id="coverage-'+i+'-pm-2"></span>');
+      $td.append($span);
+      $tr.append($td);
+            
+      $('#tb-view-week > tbody').append($tr);      
+    }
+    
+    $('#tb-view-week').table('refresh');
+    $("#tb-view-week > tbody tr:even").css("background-color", "#F0F0F0");
+  };
+
+  uiLoadEditWeek = function (week) {
+    for (var d = 0; d < week.length; d++) {
+      for (var s = 1; s < 3; s++) {
+        for (var l = 1; l < 3; l++) {
+          var cmd = {};
+          cmd['cmd'] = 'getCoverage';
+          // cmd['date'] = uiEditWeekGetDate(d, shift_name(s)).format('yyyy-mm-dd');
+          cmd['date'] = week[d].format('yyyy-mm-dd');
+          cmd['shift_id'] = s;
+          cmd['location_id'] = l;
+          $.post('dodcal.php', cmd, function (response) {
+            var r = JSON.parse(response);
+            if (r.status == 'success') {
+              var coverage = JSON.parse(r.data)[0];
+              var date = new Date(coverage.date+' 08:00');
+              var day = date.getDay()-1;
+              var shift = shift_name(coverage.shift_id);
+              var dod_name = '*';
+              if (coverage.dod_next == '0') {
+                dod_name = '';
+              }
+              uiEditWeekSetDOD(day, shift, coverage.location_id, coverage.dod_id);
+              uiEditWeekSetCoverage(day, shift, coverage.location_id, coverage.coverage);
+              uiEditWeekSetNextDOD(day, shift, coverage.location_id, coverage.dod_next);
+            }
+          });
+        }
+      }
+    }
+  };
+
+  uiViewDay = function (day) {
+    $('#tb-view-day > tbody').empty();
+    
+    var $tr = $('<tr></tr>');
+    // AM, location 1
+    // var $td = $('<td></td>');
+    // var $span = $('<span id="date-am">'+day.toDateString()+'</span>');
+    // $td.append($span);
+    // $tr.append($td);
+    
+    $td = $('<td>'+shifts[0].shift_name+'</td>');
+    $tr.append($td);
+    
+    $td = $('<td></td');
+    $span = $('<span id="dod-am-1"></span');
+    $td.append($span);
+    $tr.append($td);
+    
+    // AM, location 2
+    $td = $('<td></td>');
+    $span = $('<span id="coverage-am-1"></span>');
+    $td.append($span);
+    $tr.append($td);
+    
+    $td = $('<td></td');
+    $span = $('<span id="dod-am-2"></span>');
+    $td.append($span);
+    $tr.append($td);
+    
+    $td = $('<td></td>');
+    $span = $('<span id="coverage-am-2"></span>');
+    $td.append($span);
+    $tr.append($td);
+          
+    $('#tb-view-day > tbody').append($tr);
+    
+    // PM, location 1
+    var $tr = $('<tr></tr>');
+    // var $td = $('<td></td>');
+    // var $span = $('<span id="date-pm">'+day.toDateString()+'</span>');
+    // $td.append($span);
+    // $tr.append($td);
+    
+    $td = $('<td>'+shifts[1].shift_name+'</td>');
+    $tr.append($td);      
+    
+    $td = $('<td></td>');
+    $span = $('<span id="dod-pm-1"></span');
+    $td.append($span);
+    $tr.append($td);
+    
+    $td = $('<td></td>');
+    $span = $('<span  id="coverage-pm-1"></span>');
+    $td.append($span);
+    $tr.append($td);
+    
+    // PM, location 2
+    $td = $('<td></td>');
+    $span = $('<span id="dod-pm-2"></span');
+    $td.append($span);
+    $tr.append($td);
+
+    $td = $('<td></td>');
+    $span = $('<span id="coverage-pm-2"></span>');
+    $td.append($span);
+    $tr.append($td);
+          
+    $('#tb-view-day > tbody').append($tr);      
+    
+    $('#tb-view-day').table('refresh');
+    $("#tb-view-day > tbody tr:even").css("background-color", "#F0F0F0");
   };
   
   cbSaveEditWeek = function () {
     var coverage = uiGetWeek();
-    console.log(coverage);
     
     var promises = [];
     for (var i = 0; i < coverage.length; i++ ) {
@@ -256,7 +543,6 @@ dodcal = (function () {
       cmd['dod_next'] = coverage[i]['am']['1']['dod_next'];
       cmd['coverage'] = coverage[i]['am']['1']['coverage'];
       promises.push($.post('dodcal.php', cmd));
-      console.log(cmd);
       
       var cmd = {};
       cmd['cmd'] = 'saveCoverage';
@@ -267,7 +553,6 @@ dodcal = (function () {
       cmd['dod_next'] = coverage[i]['am']['2']['dod_next'];
       cmd['coverage'] = coverage[i]['am']['2']['coverage'];
       promises.push($.post('dodcal.php', cmd));
-      console.log(cmd);
 
       var cmd = {};
       cmd['cmd'] = 'saveCoverage';
@@ -278,7 +563,6 @@ dodcal = (function () {
       cmd['dod_next'] = coverage[i]['pm']['1']['dod_next'];
       cmd['coverage'] = coverage[i]['pm']['1']['coverage'];
       promises.push($.post('dodcal.php', cmd));
-      console.log(cmd);
       
       var cmd = {};
       cmd['cmd'] = 'saveCoverage';
@@ -289,15 +573,181 @@ dodcal = (function () {
       cmd['dod_next'] = coverage[i]['pm']['2']['dod_next'];
       cmd['coverage'] = coverage[i]['pm']['2']['coverage'];
       promises.push($.post('dodcal.php', cmd));
-      console.log(cmd);           
     }
     $.when.apply(null, promises).done(function(r) {
       alert('Saved');
     });    
   };
+
+  cbEditNextWeek = function () {
+    var monday = new Date(uiEditWeekGetDate(0, 'am'));
+    monday.setDate(monday.getDate() + 7);
+    var week = getWeek(monday);
+    uiEditWeek(week);
+    uiLoadEditWeek(week);    
+  };
+
+  cbEditPrevWeek = function () {
+    var monday = new Date(uiEditWeekGetDate(0, 'am'));
+    monday.setDate(monday.getDate() - 7);
+    var week = getWeek(monday);
+    uiEditWeek(week);
+    uiLoadEditWeek(week);    
+  };
+  
+  cbEditCopyPrevWeek = function () {
+    var monday = new Date(uiEditWeekGetDate(0, 'am'));
+    monday.setDate(monday.getDate() - 7);
+    var week = getWeek(monday);
+    // uiEditWeek(week);
+    uiLoadEditWeek(week);    
+  };  
+  
+  uiLoadViewWeek = function (week) {
+    for (var d = 0; d < week.length; d++) {
+      for (var s = 1; s < 3; s++) {
+        for (var l = 1; l < 3; l++) {
+          var cmd = {};
+          cmd['cmd'] = 'getCoverage';
+          cmd['date'] = uiViewWeekGetDate(d, shift_name(s)).format('yyyy-mm-dd');
+          cmd['shift_id'] = s;
+          cmd['location_id'] = l;
+          $.post('dodcal.php', cmd, function (response) {
+            var r = JSON.parse(response);
+            if (r.status == 'success') {
+              var coverage = JSON.parse(r.data)[0];
+              var tmp = coverage.date.split('-');
+              var date = new Date(tmp[0], tmp[1]-1, tmp[2]);
+              var day = date.getDay()-1;
+              var shift = shift_name(coverage.shift_id);
+              var dod_name = '*';
+              if (coverage.dod_next == '0') {
+                dod_name = '';
+              }
+              for (var i = 0; i < dods.length; i++) {
+                if (dods[i].dod_id == coverage.dod_id) {
+                  dod_name += dods[i].dod_name;
+                }
+              }
+              uiViewWeekSetDOD(day, shift, coverage.location_id, dod_name);
+              uiViewWeekSetCoverage(day, shift, coverage.location_id, coverage.coverage);
+            }
+          });
+        }
+      }
+    }
+  };
+  
+  uiLoadViewDay = function () {
+    for (var s = 1; s < 3; s++) {
+      for (var l = 1; l < 3; l++) {
+        var cmd = {};
+        cmd['cmd'] = 'getCoverage';
+        // cmd['date'] = uiViewDayGetDate(shift_name(s)).format('yyyy-mm-dd');
+        cmd['date'] = uiGetDay().format('yyyy-mm-dd');
+        cmd['shift_id'] = s;
+        cmd['location_id'] = l;
+        $.post('dodcal.php', cmd, function (response) {
+          var r = JSON.parse(response);
+          if (r.status == 'success') {
+            var coverage = JSON.parse(r.data)[0];
+            var date = new Date(coverage.date+' 08:00');
+            var day = date.getDay()-1;
+            var shift = shift_name(coverage.shift_id);
+            var dod_name = '*';
+            if (coverage.dod_next == '0') {
+              dod_name = '';
+            }
+            for (var i = 0; i < dods.length; i++) {
+              if (dods[i].dod_id == coverage.dod_id) {
+                dod_name += dods[i].dod_name;
+              }
+            }
+            uiViewDaySetDOD(shift, coverage.location_id, dod_name);
+            uiViewDaySetCoverage(shift, coverage.location_id, coverage.coverage);
+            $('#tb-view-day').table('refresh');
+          }
+        });
+      }
+    }
+  };
+  
+  cbViewNextWeek = function () {
+    var monday = new Date(uiViewWeekGetDate(0, 'am'));
+    monday.setDate(monday.getDate() + 7);
+    var week = getWeek(monday);
+    uiViewWeek(week);
+    uiLoadViewWeek(week);    
+  };
+
+  cbViewPrevWeek = function () {
+    var monday = new Date(uiViewWeekGetDate(0, 'am'));
+    monday.setDate(monday.getDate() - 7);
+    var week = getWeek(monday);
+    uiViewWeek(week);
+    uiLoadViewWeek(week);    
+  };
+
+  cbViewNextDay = function () {
+    var day = new Date(uiGetDay());
+    day.setDate(day.getDate() + 1);
+
+    if (day.getDay() == 0) { // go to next week
+      day.setDate(day.getDate() + 1);
+    } else if (day.getDay() == 6) { // go to next week
+      day.setDate(day.getDate() + 2);
+    }
+    
+    uiSetDay(day);
+    uiViewDay(day);
+    uiLoadViewDay();    
+  };
+
+  cbViewPrevDay = function () {
+    var day = new Date(uiGetDay());
+    day.setDate(day.getDate() - 1);
+
+    if (day.getDay() == 0) { // go to prev week
+      day.setDate(day.getDate() - 2);
+    } else if (day.getDay() == 6) { // go to prev week
+      day.setDate(day.getDate() - 1);
+    }
+    
+    uiSetDay(day);
+    uiViewDay(day);
+    uiLoadViewDay();  
+  };
   
   pub.bindSaveEditWeek = function () {
-    $('#save-edit-week').on('click', cbSaveEditWeek);
+    $('#edit-save-week').on('click', cbSaveEditWeek);
+  };
+  
+  pub.bindEditNextWeek = function () {
+    $('#edit-next-week').on('click', cbEditNextWeek);
+  };
+
+  pub.bindEditPrevWeek = function () {
+    $('#edit-prev-week').on('click', cbEditPrevWeek);
+  };
+
+  pub.bindEditCopyPrevWeek = function () {
+    $('#edit-copy-prev-week').on('click', cbEditCopyPrevWeek);
+  };
+    
+  pub.bindViewNextWeek = function () {
+    $('#view-next-week').on('click', cbViewNextWeek);
+  };
+  
+  pub.bindViewPrevWeek = function () {
+    $('#view-prev-week').on('click', cbViewPrevWeek);
+  };
+
+  pub.bindViewNextDay = function () {
+    $('#view-next-day').on('click', cbViewNextDay);
+  };
+  
+  pub.bindViewPrevDay = function () {
+    $('#view-prev-day').on('click', cbViewPrevDay);
   };
   
   pub.initData = function () {
@@ -310,15 +760,66 @@ dodcal = (function () {
     var today = new Date();    
     today.setDate(today.getDate() + 0);
     
+    var week = [];
+    week = getWeek(today);
+        
     var promises = [];
     promises.push($.post('dodcal.php', {'cmd': 'getShifts'}).done(cbLoadShifts));
     promises.push($.post('dodcal.php', {'cmd': 'getShifts'}).done(cbLoadLocations));
     promises.push($.post('dodcal.php', {'cmd': 'getDODs'}).done(cbLoadDODs));
     
     $.when.apply(null, promises).done(function(r) {
-      uiEditWeek(today);
+      uiEditWeek(week);
+      uiLoadEditWeek(week);
     });
   };
+  
+  pub.initViewWeek = function () {
+    var today = new Date();    
+    today.setDate(today.getDate() + 0);
+    
+    var week = [];
+    week = getWeek(today);    
+    
+    var promises = [];
+    promises.push($.post('dodcal.php', {'cmd': 'getShifts'}).done(cbLoadShifts));
+    promises.push($.post('dodcal.php', {'cmd': 'getShifts'}).done(cbLoadLocations));
+    promises.push($.post('dodcal.php', {'cmd': 'getDODs'}).done(cbLoadDODs));
+    
+    $.when.apply(null, promises).done(function(r) {
+      uiViewWeek(week);
+      uiLoadViewWeek(week);
+    });
+  };
+
+  pub.initViewDay = function () {
+    var day = new Date();    
+    
+    if (day.getDay() == 0) { // go to next week
+      day.setDate(day.getDate() + 1);
+    } else if (day.getDay() == 6) { // go to next week
+      day.setDate(day.getDate() + 2);
+    }    
+     
+    var promises = [];
+    promises.push($.post('dodcal.php', {'cmd': 'getShifts'}).done(cbLoadShifts));
+    promises.push($.post('dodcal.php', {'cmd': 'getShifts'}).done(cbLoadLocations));
+    promises.push($.post('dodcal.php', {'cmd': 'getDODs'}).done(cbLoadDODs));
+    
+    $.when.apply(null, promises).done(function(r) {
+      uiSetDay(day);
+      uiViewDay(day);
+      uiLoadViewDay();
+    });
+  };
+  
+  pub.uiInitViewNavbar = function () {
+    var $ul = $('<ul></ul>');
+    $ul.append('<li><a href = "#page-view-day" data-icon="clock">Day</a></li>');
+    $ul.append('<li><a href = "#page-view-week" data-icon="calendar">Week</a></li>');
+    $('.view-navbar').append($ul);
+  };
+
   
   return pub;
 }) ();

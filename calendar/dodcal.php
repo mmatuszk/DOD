@@ -13,6 +13,7 @@ define('CMD_GET_SHIFTS', 'getShifts');
 define('CMD_GET_LOCATIONS', 'getLocations');
 define('CMD_GET_DODS', 'getDODs');
 define('CMD_SAVE_COVERAGE', 'saveCoverage');
+define('CMD_GET_COVERAGE', 'getCoverage');
 
 define('DB_TB_SHIFTS', 'shifts');
 define('DB_COL_SHIFT_ID', 'shift_id');
@@ -153,6 +154,23 @@ if (isset($_POST['cmd'])) {
     }
     $exitCode[EC_STATUS] = EC_STATUS_SUCCESS;
     $exitCode[EC_DATA] = $cmd.": OK";    
+  } else if ($cmd == CMD_GET_COVERAGE) {
+    $date = $_POST['date'];
+    $shift_id = $_POST['shift_id'];
+    $location_id = $_POST['location_id'];    
+    $query = quereyGetCoverage($date, $shift_id, $location_id);
+    $result = mysqli_query($link, $query);
+    $data = array();
+    if (mysqli_num_rows($result) > 0) {
+      while ($row = mysqli_fetch_assoc($result)){
+        $data[] = $row;
+      }
+      $exitCode[EC_STATUS] = EC_STATUS_SUCCESS;
+      $exitCode[EC_DATA] = json_encode($data);
+    } else {
+      $exitCode[EC_STATUS] = EC_STATUS_ERR;
+      $exitCode[EC_DATA] = $cmd.': No data found';
+    }
   } else {
     $exitCode[EC_STATUS] = EC_STATUS_ERR;
     $exitCode[EC_DATA] = $cmd.': Command not recognized';
