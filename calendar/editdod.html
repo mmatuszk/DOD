@@ -7,6 +7,11 @@
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <script src="date.format.js"></script>
   <script src="dodcal.js"></script>
+  <style>
+    .dod-delete {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <div data-role="page" id="page-edit-week">
@@ -53,6 +58,32 @@
 
     </div>
   </div>
+  
+  <div data-role="page" id="page-edit-dod-list">
+    <div data-role="header">
+      <h1>Edit DOD List (NUID:<span class="disp-nuid"></span>)</h1>
+      <div data-role="navbar" class="main-navbar"> </div>
+    </div>
+    <div data-role="main">
+      <a href="#" class="ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-left" id="edit-dod-list-add">Add</a>
+      <a href="#" class="ui-btn ui-btn-inline ui-icon-check ui-btn-icon-left" id="edit-dod-list-save">Save</a>
+      <table data-role="table" id="tb-edit-dod-list" data-mode="reflow" class="ui-responsive">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>E-mail</th>
+            <th>Cell</th>
+            <th>Active</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+    
   <div data-role="page" id="page-nuid">
     <div data-role="header">
       <h1>KP SM Enter NUID</h1>
@@ -68,8 +99,13 @@
   dodcal.bindEditPrevWeek();
   dodcal.bindEditCopyPrevWeek();
   dodcal.bindSaveEditWeek();
+  dodcal.bindAddDODList();
+  dodcal.bindSaveDODList();
   $("#page-edit-week").on('pagebeforeshow', function (event) {
     dodcal.initEditWeek();
+  });
+  $('#page-edit-dod-list').on('pagebeforeshow', function (event) {
+    dodcal.initEditDODList();
   });
 </script>
 </html>
