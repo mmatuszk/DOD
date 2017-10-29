@@ -718,6 +718,151 @@ dodcal = (function () {
     uiLoadViewDay();  
   };
   
+  uiEditDODList = function() {
+    $('#tb-edit-dod-list > tbody').empty();
+    
+    for (var i = 0; i < dods.length; i++) {
+      var $tr = $('<tr id="dod-row-'+dods[i].dod_id+'"></tr>');
+      
+      var $td = $('<td></td>');
+      var $input = $('<input type="text" id="dod-name-'+dods[i].dod_id+'" value="'+dods[i].dod_name+'" />');
+      $td.append($input);
+      $tr.append($td);
+
+      var $td = $('<td></td>');
+      var $input = $('<input type="text" id="dod-email-'+dods[i].dod_id+'" value="'+dods[i].dod_email+'" />');
+      $td.append($input);
+      $tr.append($td);
+
+      var $td = $('<td></td>');
+      var $input = $('<input type="text" id="dod-cell-'+dods[i].dod_id+'" value="'+dods[i].dod_cell+'" />');
+      $td.append($input);
+      $tr.append($td);
+      
+      $td = $('<td></td>');
+      var $input = $('<input type="checkbox" id="dod-active-'+dods[i].dod_id+'">');
+      if (dods[i].dod_active == '0') {
+        $input.prop('checked', false);
+      } else {
+        $input.prop('checked', true);
+      }      
+      $td.append($input);
+      $input.checkboxradio();
+      $tr.append($td);
+      
+      // var $td = $('<td></td>');
+      // var $input = $('<a href="#" class="ui-btn ui-icon-delete ui-btn-icon-notext ">Delete</a>');
+      // $input.on('click', cbUIDeleteDOD);
+      // $td.append($input);
+      // $tr.append($td);            
+      
+      $('#tb-edit-dod-list > tbody').append($tr);
+    }
+    
+    $('#tb-edit-dod-list').table('refresh');
+    // $("#tb-edit-dod-list > tbody tr:even").css("background-color", "#F0F0F0");
+  };
+  
+  cbUIDeleteDOD = function (e) {
+    // $(e.target).parent().parent().remove();
+    $(e.target).parent().parent().addClass('dod-delete');
+  };
+  
+  cbAddDODList = function () {
+    var i = dods.length;
+    dods.push({dod_id: i+1, dod_name: '', dod_email: '', dod_cell: '', dod_active: 1});
+    
+    var $tr = $('<tr id="dod-row-'+dods[i].dod_id+'" class="dod-new"></tr>');
+    
+    var $td = $('<td></td>');
+    var $input = $('<input type="text" id="dod-name-'+dods[i].dod_id+'" value="'+dods[i].dod_name+'" />');
+    $td.append($input);
+    $tr.append($td);
+
+    var $td = $('<td></td>');
+    var $input = $('<input type="text" id="dod-email-'+dods[i].dod_id+'" value="'+dods[i].dod_email+'" />');
+    $td.append($input);
+    $tr.append($td);
+
+    var $td = $('<td></td>');
+    var $input = $('<input type="text" id="dod-cell-'+dods[i].dod_id+'" value="'+dods[i].dod_cell+'" />');
+    $td.append($input);
+    $tr.append($td);
+    
+    $td = $('<td></td>');
+    var $input = $('<input type="checkbox" id="dod-active-'+dods[i].dod_id+'">');
+    if (dods[i].dod_active == '0') {
+      $input.prop('checked', false);
+    } else {
+      $input.prop('checked', true);
+    }      
+    $td.append($input);
+    $input.checkboxradio();
+    $tr.append($td);
+    
+    var $td = $('<td></td>');
+    var $input = $('<a href="#" class="ui-btn ui-icon-delete ui-btn-icon-notext ">Delete</a>');
+      // '<input type="text" id="dod-cell-"'+dods[i].dod_id+'" value="'+dods[i].dod_cell+'" />');
+    $input.on('click', cbUIDeleteDOD);
+    $td.append($input);
+    $tr.append($td);            
+    
+    $('#tb-edit-dod-list > tbody').append($tr);
+    $('#tb-edit-dod-list').table('refresh');    
+  };
+  
+  cbSaveDODList = function () {
+    var promises = [];
+    
+    $('#tb-edit-dod-list >tbody >tr').each(function (index) {
+      var $tr = $(this);
+      var dod_id = $tr.attr('id').replace('dod-row-', '');
+
+      if ($tr.hasClass('dod-delete') && !$tr.hasClass('dod-new')) {
+        // We are deleting a DODO
+        
+        console.log('delete '+$tr.attr('id'));
+      } else if ($tr.hasClass('dod-new') && !$tr.hasClass('dod-delete')) {
+        // We are adding a new DOD
+        var cmd = {};
+        cmd['cmd'] = 'saveDOD';
+        cmd['dod_id'] = null;
+        cmd['dod_name'] = $('#dod-name-'+dod_id).val();
+        cmd['dod_email'] = $('#dod-email-'+dod_id).val();
+        cmd['dod_cell'] = $('#dod-cell-'+dod_id).val();
+        if ($('#dod-active-'+dod_id).prop('checked')) {
+          cmd['dod_active'] = 1;
+        } else {
+          cmd['dod_active'] = 0;
+        }
+        
+        promises.push($.post('dodcal.php', cmd));
+      } else if ($tr.hasClass('dod-new') && $tr.hasClass('dod-delete')) {
+        console.log('ingore '+$tr.attr('id'));
+      } else {
+        var cmd = {};
+        cmd['cmd'] = 'saveDOD';
+        cmd['dod_id'] = dod_id;
+        cmd['dod_name'] = $('#dod-name-'+dod_id).val();
+        cmd['dod_email'] = $('#dod-email-'+dod_id).val();
+        cmd['dod_cell'] = $('#dod-cell-'+dod_id).val();
+        if ($('#dod-active-'+dod_id).prop('checked')) {
+          cmd['dod_active'] = 1;
+        } else {
+          cmd['dod_active'] = 0;
+        }
+        
+        promises.push($.post('dodcal.php', cmd));
+      }
+    });
+    
+    $.when.apply(null, promises).done(function(r) {
+      alert('Saved');
+      pub.initEditDODList();
+    });
+        
+  };
+  
   pub.bindSaveEditWeek = function () {
     $('#edit-save-week').on('click', cbSaveEditWeek);
   };
@@ -748,6 +893,14 @@ dodcal = (function () {
   
   pub.bindViewPrevDay = function () {
     $('#view-prev-day').on('click', cbViewPrevDay);
+  };
+  
+  pub.bindAddDODList = function () {
+    $('#edit-dod-list-add').on('click', cbAddDODList);
+  };
+  
+  pub.bindSaveDODList = function () {
+    $('#edit-dod-list-save').on('click', cbSaveDODList);
   };
   
   pub.initData = function () {
@@ -812,6 +965,16 @@ dodcal = (function () {
       uiLoadViewDay();
     });
   };
+  
+  pub.initEditDODList = function () {
+    var promises = [];
+    promises.push($.post('dodcal.php', {'cmd': 'getDODs'}).done(cbLoadDODs));
+    
+    $.when.apply(null, promises).done(function(r) {
+      uiEditDODList();
+      // uiLoadEditWeek(week);
+    });
+  };  
   
   pub.uiInitViewNavbar = function () {
     var $ul = $('<ul></ul>');
