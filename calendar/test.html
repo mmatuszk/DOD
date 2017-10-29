@@ -7,13 +7,12 @@
 </body>
 <script type="text/javascript">
   var cmd = {};
-  cmd['cmd'] = 'getCoverage';
-  cmd['date'] = '2017-08-04';
-  cmd['shift_id'] = 1;
-  cmd['location_id'] = 1;
-  // cmd['dod_id'] = 8;;
-  // cmd['dod_next'] = true;
-  // cmd['coverage'] = 'Marcin (full), Steve (1D)';
+  cmd['cmd'] = 'saveDOD';
+  cmd['dod_id'] = 2;
+  cmd['dod_name'] = 'Audrey';
+  cmd['dod_email'] = 'audrey@gmail.com';
+  cmd['dod_cell'] = '';
+  cmd['dod_active'] = 1;
   $.post('dodcal.php', cmd, function(response) {
     $('body').html(response);
   });
