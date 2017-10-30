@@ -165,7 +165,9 @@ dodcal = (function () {
       $td = $('<td></td');
       var $select = $('<select id="dod-'+i+'-am-1"></select>');
       for (var j = 0; j < dods.length; j++) {
-        $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        if (dods[j].dod_active == '1') {
+          $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        }
       }
       $td.append($select);
       $select.selectmenu();
@@ -187,7 +189,9 @@ dodcal = (function () {
       $td = $('<td></td');
       var $select = $('<select id="dod-'+i+'-am-2"></select>');
       for (var j = 0; j < dods.length; j++) {
-        $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        if (dods[j].dod_active == '1') {
+          $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        }
       }
       $td.append($select);
       $select.selectmenu();
@@ -219,7 +223,9 @@ dodcal = (function () {
       $td = $('<td></td');
       var $select = $('<select id="dod-'+i+'-pm-1"></select>');
       for (var j = 0; j < dods.length; j++) {
-        $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        if (dods[j].dod_active == '1') {
+          $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        }
       }
       $td.append($select);
       $select.selectmenu();
@@ -242,7 +248,9 @@ dodcal = (function () {
       $td = $('<td></td');
       var $select = $('<select id="dod-'+i+'-pm-2"></select>');
       for (var j = 0; j < dods.length; j++) {
-        $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        if (dods[j].dod_active == '1') {
+          $select.append('<option value="'+dods[j].dod_id+'">'+dods[j].dod_name+'</option>');
+        }
       }
       $td.append($select);
       $select.selectmenu();
@@ -981,6 +989,13 @@ dodcal = (function () {
     $ul.append('<li><a href = "#page-view-day" data-icon="clock">Day</a></li>');
     $ul.append('<li><a href = "#page-view-week" data-icon="calendar">Week</a></li>');
     $('.view-navbar').append($ul);
+  };
+  
+  pub.uiInitEditNavBar = function () {
+    var $ul = $('<ul></ul>');
+    $ul.append('<li><a href = "#page-edit-week" data-icon="calendar">Edit Week</a></li>');
+    $ul.append('<li><a href = "#page-edit-dod-list" data-icon="bars">Edit DOD List</a></li>');
+    $('.edit-navbar').append($ul);  
   };
 
   
