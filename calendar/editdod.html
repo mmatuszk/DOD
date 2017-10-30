@@ -16,8 +16,8 @@
 <body>
   <div data-role="page" id="page-edit-week">
     <div data-role="header">
-      <h1>Edit Week (NUID:<span class="disp-nuid"></span>)</h1>
-      <div data-role="navbar" class="main-navbar"> </div>
+      <h1>Edit Week <!-- (NUID:<span class="disp-nuid"></span>) --></h1>
+      <div data-role="navbar" class="edit-navbar"> </div>
     </div>
     <div data-role="main">
       <a href="#" class="ui-btn ui-btn-inline" id="edit-prev-week">Previous</a>
@@ -62,8 +62,8 @@
   
   <div data-role="page" id="page-edit-dod-list">
     <div data-role="header">
-      <h1>Edit DOD List (NUID:<span class="disp-nuid"></span>)</h1>
-      <div data-role="navbar" class="main-navbar"> </div>
+      <h1>Edit DOD List <!-- (NUID:<span class="disp-nuid"></span>) --></h1>
+      <div data-role="navbar" class="edit-navbar"> </div>
     </div>
     <div data-role="main">
       <a href="#" class="ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-left" id="edit-dod-list-add">Add</a>
@@ -96,6 +96,7 @@
   </div>
 </body>
 <script type="text/javascript">
+  dodcal.uiInitEditNavBar();
   dodcal.bindEditNextWeek();
   dodcal.bindEditPrevWeek();
   dodcal.bindEditCopyPrevWeek();
