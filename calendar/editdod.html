@@ -104,7 +104,7 @@
         </tbody>
       </table>
       <input type="text" id="sms-msg" />
-      <input type="button" id="send-msg" value="Send SMS"/>
+      <input type="button" id="send-sms" value="Send SMS"/>
       
     </div>
   </div>
@@ -127,6 +127,7 @@
   dodcal.bindSaveEditWeek();
   dodcal.bindAddDODList();
   dodcal.bindSaveDODList();
+  dodcal.bindSendSMS();
   $("#page-edit-week").on('pagebeforeshow', function (event) {
     dodcal.initEditWeek();
   });

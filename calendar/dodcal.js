@@ -898,6 +898,29 @@ dodcal = (function () {
     }
     
     $('#tb-edit-dod-sms').table('refresh');
+  };
+  
+  cbSendSMS = function () {
+    $('#tb-edit-dod-sms >tbody >tr').each(function (index) {
+      var $tr = $(this);
+      var dod_id = $tr.attr('id').replace('dod-row-', '');
+      
+      $i = $tr.find('#dod-sms-'+dod_id);
+      if ($i.prop('checked') == true) {
+        var dod_cell = $tr.find('#dod-cell-'+dod_id).text();
+        // remove non-digits
+        dod_cell = dod_cell.replace(/\D/g,'');
+        if (dod_cell.length == 10) {
+          var cmd = {}; 
+          cmd['cmd'] = 'sendMail';
+          cmd['to'] = dod_cell+'@vtext.com';
+          cmd['subject'] = '';
+          cmd ['message'] = $('#sms-msg').val();
+          console.log(cmd);
+          $.post('dodcal.php', cmd); 
+        }
+      };
+     });   
   };  
   
   pub.bindSaveEditWeek = function () {
@@ -938,6 +961,11 @@ dodcal = (function () {
   
   pub.bindSaveDODList = function () {
     $('#edit-dod-list-save').on('click', cbSaveDODList);
+  };
+  
+  pub.bindSendSMS = function () {
+    console.log('bind sms');
+    $('#send-sms').on('click', cbSendSMS);
   };
   
   pub.initData = function () {
