@@ -84,6 +84,30 @@
 
     </div>
   </div>
+
+  <div data-role="page" id="page-edit-dod-sms">
+    <div data-role="header">
+      <h1>SMS DOD<!-- (NUID:<span class="disp-nuid"></span>) --></h1>
+      <div data-role="navbar" class="edit-navbar"> </div>
+    </div>
+    <div data-role="main">
+      <table data-role="table" id="tb-edit-dod-sms" data-mode="reflow" class="ui-responsive">
+        <thead>
+          <tr>
+            <th><label for="sms-all">All</label><input type="checkbox" id="sms-all" /></th>
+            <th>Name</th>
+            <th>Cell</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <input type="text" id="sms-msg" />
+      <input type="button" id="send-msg" value="Send SMS"/>
+      
+    </div>
+  </div>
     
   <div data-role="page" id="page-nuid">
     <div data-role="header">
@@ -109,5 +133,8 @@
   $('#page-edit-dod-list').on('pagebeforeshow', function (event) {
     dodcal.initEditDODList();
   });
+  $('#page-edit-dod-sms').on('pagebeforeshow', function (event) {
+    dodcal.initEditDODSMS();
+  });  
 </script>
 </html>

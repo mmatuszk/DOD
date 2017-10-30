@@ -871,6 +871,35 @@ dodcal = (function () {
         
   };
   
+  uiEditDODSMS = function() {
+    $('#tb-edit-dod-sms > tbody').empty();
+    
+    for (var i = 0; i < dods.length; i++) {
+      var $tr = $('<tr id="dod-row-'+dods[i].dod_id+'"></tr>');
+      
+      var $td = $('<td></td>');
+      var $input = $('<input type="checkbox" id="dod-sms-'+dods[i].dod_id+'" />');
+      $td.append($input);
+      $tr.append($td);
+      
+      $input.checkboxradio();
+
+      var $td = $('<td></td>');
+      var $span = $('<span id="dod-name-'+dods[i].dod_id+'">'+dods[i].dod_name+'</span>');
+      $td.append($span);
+      $tr.append($td);
+
+      var $td = $('<td></td>');
+      var $span = $('<span id="dod-cell-'+dods[i].dod_id+'">'+dods[i].dod_cell+'</span>');
+      $td.append($span);
+      $tr.append($td);
+                  
+      $('#tb-edit-dod-sms > tbody').append($tr);
+    }
+    
+    $('#tb-edit-dod-sms').table('refresh');
+  };  
+  
   pub.bindSaveEditWeek = function () {
     $('#edit-save-week').on('click', cbSaveEditWeek);
   };
@@ -984,6 +1013,16 @@ dodcal = (function () {
     });
   };  
   
+  pub.initEditDODSMS = function () {
+    var promises = [];
+    promises.push($.post('dodcal.php', {'cmd': 'getDODs'}).done(cbLoadDODs));
+    
+    $.when.apply(null, promises).done(function(r) {
+      uiEditDODSMS();
+      // uiLoadEditWeek(week);
+    });
+  }; 
+  
   pub.uiInitViewNavbar = function () {
     var $ul = $('<ul></ul>');
     $ul.append('<li><a href = "#page-view-day" data-icon="clock">Day</a></li>');
@@ -995,6 +1034,7 @@ dodcal = (function () {
     var $ul = $('<ul></ul>');
     $ul.append('<li><a href = "#page-edit-week" data-icon="calendar">Edit Week</a></li>');
     $ul.append('<li><a href = "#page-edit-dod-list" data-icon="bars">Edit DOD List</a></li>');
+    $ul.append('<li><a href = "#page-edit-dod-sms" data-icon="mail">DOD SMS</a></li>');
     $('.edit-navbar').append($ul);  
   };
 

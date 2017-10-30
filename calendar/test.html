@@ -7,12 +7,10 @@
 </body>
 <script type="text/javascript">
   var cmd = {};
-  cmd['cmd'] = 'saveDOD';
-  cmd['dod_id'] = 2;
-  cmd['dod_name'] = 'Audrey';
-  cmd['dod_email'] = 'audrey@gmail.com';
-  cmd['dod_cell'] = '';
-  cmd['dod_active'] = 1;
+  cmd['cmd'] = 'sendMail';
+  cmd['to'] = '5104062159@vtext.com';
+  cmd['subject'] = '';
+  cmd['message'] = 'DOD coverage changed';
   $.post('dodcal.php', cmd, function(response) {
     $('body').html(response);
   });

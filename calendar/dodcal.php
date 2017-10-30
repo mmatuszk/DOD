@@ -15,6 +15,7 @@ define('CMD_GET_DODS', 'getDODs');
 define('CMD_SAVE_DOD', 'saveDOD');
 define('CMD_SAVE_COVERAGE', 'saveCoverage');
 define('CMD_GET_COVERAGE', 'getCoverage');
+define('CMD_SEND_MAIL', 'sendMail');
 
 define('DB_TB_SHIFTS', 'shifts');
 define('DB_COL_SHIFT_ID', 'shift_id');
@@ -204,6 +205,18 @@ if (isset($_POST['cmd'])) {
       $exitCode[EC_STATUS] = EC_STATUS_ERR;
       $exitCode[EC_DATA] = $cmd.': No data found';
     }
+  } else if ($cmd == CMD_SEND_MAIL) {
+    $to = $_POST['to'];
+    $from = 'marcin@blackdot.io';
+    $subject = $_POST['subject'];
+    $message = $_POST['message'];
+    $headers = 'From: marcin.matuszkiewicz@kp.org' . "\r\n" .
+               'Reply-To: marcin.matuszkiewicz@kp.org' . "\r\n" .
+               'X-Mailer: PHP/' . phpversion();
+    
+    mail($to,$subject, $message, $headers);
+    $exitCode[EC_STATUS] = EC_STATUS_SUCCESS;
+    $exitCode[EC_DATA] = $cmd.": OK";        
   } else {
     $exitCode[EC_STATUS] = EC_STATUS_ERR;
     $exitCode[EC_DATA] = $cmd.': Command not recognized';
