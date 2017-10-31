@@ -211,8 +211,8 @@ if (isset($_POST['cmd'])) {
     $from = 'marcin@blackdot.io';
     $subject = $_POST['subject'];
     $message = $_POST['message'];
-    $headers = 'From: marcin.matuszkiewicz@kp.org' . "\r\n" .
-               'Reply-To: marcin.matuszkiewicz@kp.org' . "\r\n" .
+    $headers = 'From: kelly.a.welsh@kp.org' . "\r\n" .
+               'Reply-To: kelly.a.welsh@kp.org' . "\r\n" .
                'X-Mailer: PHP/' . phpversion();
     
     mail($to,$subject, $message, $headers);
