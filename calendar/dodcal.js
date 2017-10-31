@@ -659,7 +659,9 @@ dodcal = (function () {
           var r = JSON.parse(response);
           if (r.status == 'success') {
             var coverage = JSON.parse(r.data)[0];
-            var date = new Date(coverage.date+' 08:00');
+            // var date = new Date(coverage.date+' 08:00');
+            var tmp = coverage.date.split('-');
+            var date = new Date(tmp[0], tmp[1]-1, tmp[2]);
             var day = date.getDay()-1;
             var shift = shift_name(coverage.shift_id);
             var dod_name = '*';
