@@ -207,6 +207,7 @@ if (isset($_POST['cmd'])) {
     }
   } else if ($cmd == CMD_SEND_MAIL) {
     $to = $_POST['to'];
+    $dod_id = $_POST['dod_id'];
     $from = 'marcin@blackdot.io';
     $subject = $_POST['subject'];
     $message = $_POST['message'];
@@ -215,8 +216,11 @@ if (isset($_POST['cmd'])) {
                'X-Mailer: PHP/' . phpversion();
     
     mail($to,$subject, $message, $headers);
+    
+    $data = array();
+    $data['dod_id'] = $dod_id;
     $exitCode[EC_STATUS] = EC_STATUS_SUCCESS;
-    $exitCode[EC_DATA] = $cmd.": OK";        
+    $exitCode[EC_DATA] = json_encode($data);        
   } else {
     $exitCode[EC_STATUS] = EC_STATUS_ERR;
     $exitCode[EC_DATA] = $cmd.': Command not recognized';

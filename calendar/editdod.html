@@ -11,6 +11,10 @@
     .dod-delete {
       display: none;
     }
+    
+    .dod-select {
+      background-color: darkgrey; 
+    }
   </style>
 </head>
 <body>
@@ -134,8 +138,14 @@
   $('#page-edit-dod-list').on('pagebeforeshow', function (event) {
     dodcal.initEditDODList();
   });
+  $('#page-edit-dod-list').on('pagehide', function (event) {
+    dodcal.hideEditDODList();
+  });
   $('#page-edit-dod-sms').on('pagebeforeshow', function (event) {
     dodcal.initEditDODSMS();
-  });  
+  });
+  $('#page-edit-dod-sms').on('pagebeforeshow', function (event) {
+    dodcal.hideEditDODSMS();
+  });    
 </script>
 </html>

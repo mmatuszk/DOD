@@ -771,6 +771,10 @@ dodcal = (function () {
     // $("#tb-edit-dod-list > tbody tr:even").css("background-color", "#F0F0F0");
   };
   
+  uiHideEditDODList = function () {
+    $('#tb-edit-dod-list > tbody').empty();
+  };
+  
   cbUIDeleteDOD = function (e) {
     // $(e.target).parent().parent().remove();
     $(e.target).parent().parent().addClass('dod-delete');
@@ -875,29 +879,40 @@ dodcal = (function () {
     $('#tb-edit-dod-sms > tbody').empty();
     
     for (var i = 0; i < dods.length; i++) {
-      var $tr = $('<tr id="dod-row-'+dods[i].dod_id+'"></tr>');
-      
-      var $td = $('<td></td>');
-      var $input = $('<input type="checkbox" id="dod-sms-'+dods[i].dod_id+'" />');
-      $td.append($input);
-      $tr.append($td);
-      
-      $input.checkboxradio();
-
-      var $td = $('<td></td>');
-      var $span = $('<span id="dod-name-'+dods[i].dod_id+'">'+dods[i].dod_name+'</span>');
-      $td.append($span);
-      $tr.append($td);
-
-      var $td = $('<td></td>');
-      var $span = $('<span id="dod-cell-'+dods[i].dod_id+'">'+dods[i].dod_cell+'</span>');
-      $td.append($span);
-      $tr.append($td);
-                  
-      $('#tb-edit-dod-sms > tbody').append($tr);
+      if (dods[i].dod_active == '1') {
+        var $tr = $('<tr id="dod-row-'+dods[i].dod_id+'"></tr>');
+        
+        var $td = $('<td></td>');
+        var $input = $('<input type="checkbox" id="dod-sms-'+dods[i].dod_id+'" />');
+        $td.append($input);
+        $tr.append($td);
+        
+        $input.checkboxradio();
+        
+        $input.change(function (e) {
+          var $i = $(e.target);
+          $i.closest('tr').toggleClass('dod-select');
+        });
+  
+        var $td = $('<td></td>');
+        var $span = $('<span id="dod-name-'+dods[i].dod_id+'">'+dods[i].dod_name+'</span>');
+        $td.append($span);
+        $tr.append($td);
+  
+        var $td = $('<td></td>');
+        var $span = $('<span id="dod-cell-'+dods[i].dod_id+'">'+dods[i].dod_cell+'</span>');
+        $td.append($span);
+        $tr.append($td);
+                    
+        $('#tb-edit-dod-sms > tbody').append($tr);
+      }
     }
     
     $('#tb-edit-dod-sms').table('refresh');
+  };
+  
+  uiHideEditDODSMS = function () {
+    $('#tb-edit-dod-sms > tbody').empty();
   };
   
   cbSendSMS = function () {
@@ -913,11 +928,21 @@ dodcal = (function () {
         if (dod_cell.length == 10) {
           var cmd = {}; 
           cmd['cmd'] = 'sendMail';
+          cmd['dod_id'] = dod_id;
           cmd['to'] = dod_cell+'@vtext.com';
           cmd['subject'] = '';
           cmd ['message'] = $('#sms-msg').val();
           console.log(cmd);
-          $.post('dodcal.php', cmd); 
+          $.post('dodcal.php', cmd, function (response) {
+            var r = JSON.parse(response);
+            if (r.status == 'success') {
+              var data = JSON.parse(r.data);
+              var dod_id = data.dod_id;
+              
+              $('#dod-row-'+dod_id).removeClass('dod-select');
+              $('#dod-sms-'+dod_id).prop('checked', false);
+            }  
+          }); 
         }
       };
      });   
@@ -964,7 +989,6 @@ dodcal = (function () {
   };
   
   pub.bindSendSMS = function () {
-    console.log('bind sms');
     $('#send-sms').on('click', cbSendSMS);
   };
   
@@ -1039,6 +1063,10 @@ dodcal = (function () {
       uiEditDODList();
       // uiLoadEditWeek(week);
     });
+  };
+  
+  pub.hideEditDODList = function () {
+    uiHideEditDODList();
   };  
   
   pub.initEditDODSMS = function () {
@@ -1049,6 +1077,10 @@ dodcal = (function () {
       uiEditDODSMS();
       // uiLoadEditWeek(week);
     });
+  };
+  
+  pub.hideEditDODSMS = function () {
+    uiHideEditDODSMS();
   }; 
   
   pub.uiInitViewNavbar = function () {
