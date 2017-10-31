@@ -949,7 +949,8 @@ dodcal = (function () {
           }); 
         }
       };
-     });   
+     });
+     $('#sms-msg').val('');   
   };  
   
   pub.bindSaveEditWeek = function () {
